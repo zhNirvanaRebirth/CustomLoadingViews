@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="Themes">
-        <attr name="nirvanaLoadingViewStyle" format="reference"/>
+    <attr name="ThemeNirvanaLoadingViewStyle" format="reference" />
+    <declare-styleable name="NirvanaLoadingViewStyle">
+        <attr name="inner_progress_padding" format="integer" />
+        <attr name="fan_circle_line_width" format="integer" />
+        <attr name="fan_circle_padding" format="integer" />
     </declare-styleable>
 </resources>
