@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
@@ -106,13 +107,22 @@ public class NirvanaLoadingView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         canvas.translate(width / 2, height / 2);
-        canvas.drawColor(Color.YELLOW);
 
         RectF rectF = new RectF(-width / 2, -height / 2, width / 2, height / 2);
         Paint rectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        rectPaint.setColor(Color.WHITE);
+        rectPaint.setColor(Color.parseColor("#64FFFFFF"));
         rectPaint.setStyle(Paint.Style.FILL);
         canvas.drawRoundRect(rectF, roundRadius, roundRadius, rectPaint);
+
+        Paint circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        circlePaint.setColor(Color.WHITE);
+        circlePaint.setStrokeWidth(lineWidth);
+        circlePaint.setStyle(Paint.Style.STROKE);
+        canvas.drawCircle(width / 2 - roundRadius, 0, roundRadius - lineWidth, circlePaint);
+
+        Rect bitmap = new Rect(0, 0, fanSize, fanSize);
+        Rect dist = new Rect((int) (width / 2 - fanSize - fanPadding - lineWidth), -fanSize / 2, (int) (width / 2 - fanPadding - lineWidth), fanSize / 2);
+        canvas.drawBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.fan), bitmap, dist, new Paint());
     }
 
     private float dp2px(float dp) {
