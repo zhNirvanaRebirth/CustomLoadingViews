@@ -14,7 +14,7 @@ import android.view.View;
 /**
  * Created by zhwilson on 2016/10/9.
  * 模仿别人的炫酷的进度条
- * <p/>
+ * <p>
  * obtainStyledAttributes 四个参数的相关解释：http://www.cnblogs.com/angeldevil/p/3479431.html
  */
 public class NirvanaLoadingView extends View {
@@ -36,7 +36,13 @@ public class NirvanaLoadingView extends View {
     private int width;
     //控件的高度
     private int height;
+    //进度条圆角半径
     private int roundRadius;
+    //进度条宽度
+    private int loadingW;
+    //进度条高度
+    private int loadingH;
+
 
     public NirvanaLoadingView(Context context) {
         this(context, null);
@@ -100,28 +106,36 @@ public class NirvanaLoadingView extends View {
         super.onSizeChanged(w, h, oldw, oldh);
         width = w;
         height = h;
-        roundRadius = width > height ? height / 2 : width / 2;
+        loadingW = width < getSuggestedMinimumWidth() ? getSuggestedMinimumWidth() : width;
+        loadingH = height > getSuggestedMinimumHeight() ? getSuggestedMinimumHeight() : height;
+        roundRadius = loadingW > loadingH ? loadingH / 2 : loadingW / 2;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        canvas.drawColor(Color.parseColor("#fdd052"));
         canvas.translate(width / 2, height / 2);
 
-        RectF rectF = new RectF(-width / 2, -height / 2, width / 2, height / 2);
+        RectF rectF = new RectF(-loadingW / 2, -loadingH / 2, loadingW / 2, loadingH / 2);
         Paint rectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         rectPaint.setColor(Color.parseColor("#64FFFFFF"));
         rectPaint.setStyle(Paint.Style.FILL);
         canvas.drawRoundRect(rectF, roundRadius, roundRadius, rectPaint);
 
+        Paint ringPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        ringPaint.setColor(Color.WHITE);
+        ringPaint.setStrokeWidth(lineWidth);
+        ringPaint.setStyle(Paint.Style.STROKE);
+        canvas.drawCircle(loadingW / 2 - roundRadius, 0, roundRadius - lineWidth, ringPaint);
+
         Paint circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        circlePaint.setColor(Color.WHITE);
-        circlePaint.setStrokeWidth(lineWidth);
-        circlePaint.setStyle(Paint.Style.STROKE);
-        canvas.drawCircle(width / 2 - roundRadius, 0, roundRadius - lineWidth, circlePaint);
+        circlePaint.setColor(Color.parseColor("#fdd052"));
+        circlePaint.setStyle(Paint.Style.FILL);
+        canvas.drawCircle(loadingW / 2 - roundRadius, 0, roundRadius - lineWidth, circlePaint);
 
         Rect bitmap = new Rect(0, 0, fanSize, fanSize);
-        Rect dist = new Rect((int) (width / 2 - fanSize - fanPadding - lineWidth), -fanSize / 2, (int) (width / 2 - fanPadding - lineWidth), fanSize / 2);
+        Rect dist = new Rect((int) (loadingW / 2 - fanSize - fanPadding - lineWidth), -fanSize / 2, (int) (loadingW / 2 - fanPadding - lineWidth), fanSize / 2);
         canvas.drawBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.fan), bitmap, dist, new Paint());
     }
 
