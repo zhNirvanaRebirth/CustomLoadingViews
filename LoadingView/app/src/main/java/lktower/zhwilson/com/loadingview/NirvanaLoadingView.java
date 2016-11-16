@@ -127,7 +127,7 @@ public class NirvanaLoadingView extends View {
         canvas.drawRoundRect(rectF, roundRadius, roundRadius, rectPaint);
 
         Paint progressPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        progressPaint.setColor(Color.parseColor("#fdd052"));
+        progressPaint.setColor(Color.parseColor("#ffa800"));
         progressPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         float currentProgress = (loadingW - progressPadding * 2) * (progress / maxProgress);
         float arcRadius = roundRadius - progressPadding;
