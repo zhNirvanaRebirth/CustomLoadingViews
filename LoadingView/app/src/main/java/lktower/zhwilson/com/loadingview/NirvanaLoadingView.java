@@ -14,7 +14,7 @@ import android.view.View;
 /**
  * Created by zhwilson on 2016/10/9.
  * 模仿别人的炫酷的进度条
- * <p>
+ * <p/>
  * obtainStyledAttributes 四个参数的相关解释：http://www.cnblogs.com/angeldevil/p/3479431.html
  */
 public class NirvanaLoadingView extends View {
@@ -42,6 +42,9 @@ public class NirvanaLoadingView extends View {
     private int loadingW;
     //进度条高度
     private int loadingH;
+    private float maxProgress = 100;
+    //当前进度
+    private float progress = 0;
 
 
     public NirvanaLoadingView(Context context) {
@@ -123,6 +126,20 @@ public class NirvanaLoadingView extends View {
         rectPaint.setStyle(Paint.Style.FILL);
         canvas.drawRoundRect(rectF, roundRadius, roundRadius, rectPaint);
 
+        Paint progressPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        progressPaint.setColor(Color.parseColor("#fdd052"));
+        progressPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        float currentProgress = (loadingW - progressPadding * 2) * (progress / maxProgress);
+        float arcRadius = roundRadius - progressPadding;
+        RectF arcRectF = new RectF(-(loadingW / 2 - progressPadding), -(loadingH / 2 - progressPadding), -(loadingW / 2 - progressPadding - arcRadius * 2), loadingH / 2 - progressPadding);
+        if (currentProgress >= arcRadius) {//超过了扇形区域
+            canvas.drawArc(arcRectF, 90, 180, false, progressPaint);
+            canvas.drawRect(-(loadingW / 2 - roundRadius), -(loadingH / 2 - progressPadding), -(loadingW / 2 - roundRadius) + currentProgress - arcRadius, loadingH / 2 - progressPadding, progressPaint);
+        } else {
+            double angle = (180.0 / Math.PI) * Math.acos((arcRadius - currentProgress) / arcRadius);
+            canvas.drawArc(arcRectF, (float) (180 - angle), (float) angle * 2, false, progressPaint);
+        }
+
         Paint ringPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         ringPaint.setColor(Color.WHITE);
         ringPaint.setStrokeWidth(lineWidth);
@@ -147,5 +164,10 @@ public class NirvanaLoadingView extends View {
     private float sp2px(float sp) {
         float scale = getResources().getDisplayMetrics().scaledDensity;
         return scale * sp;
+    }
+
+    public void setProgress(float progress) {
+        this.progress = progress;
+        postInvalidate();
     }
 }
