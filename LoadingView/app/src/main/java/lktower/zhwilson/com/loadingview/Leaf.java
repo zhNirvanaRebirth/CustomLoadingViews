@@ -16,4 +16,6 @@ public class Leaf {
     int rotateDir;
     //开始绘制时间
     long startTime;
+    //漂浮曲线类型
+    int floatType;
 }

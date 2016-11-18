@@ -11,6 +11,8 @@ import java.util.Random;
 public class LeafFactory {
     private static final int MAX_LEAFS = 6;
     private Random random = new Random();
+    //若不设置这个时间，可能造成叶子抱团
+    private int mAddTime;
 
     private Leaf generateLeaf() {
         Leaf leaf = new Leaf();
@@ -30,14 +32,24 @@ public class LeafFactory {
         leaf.rotateAngle = random.nextInt(360);
         //设置叶子的旋转方向
         leaf.rotateDir = random.nextInt(2);
-        //设置绘制叶子的开始时间
-        leaf.startTime = System.currentTimeMillis() + random.nextInt(1000);
+        //设置绘制叶子的开始时间 要让叶子产生的时间间隔有一定的随机性，而不是间隔固定的时间就产生一片
+        mAddTime += random.nextInt(2000);
+        leaf.startTime = System.currentTimeMillis() + mAddTime;
+        leaf.floatType = random.nextInt(2);
         return leaf;
     }
 
     public List<Leaf> generateLeafs(int leafSize) {
         List<Leaf> leafs = new ArrayList<>();
         for (int i = 0; i < leafSize; i++) {
+            leafs.add(generateLeaf());
+        }
+        return leafs;
+    }
+
+    public List<Leaf> generateLeafs() {
+        List<Leaf> leafs = new ArrayList<>();
+        for (int i = 0; i < MAX_LEAFS; i++) {
             leafs.add(generateLeaf());
         }
         return leafs;
